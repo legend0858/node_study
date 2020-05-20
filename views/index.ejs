@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="https://unpkg.com/vue@2.3.3"></script>
+    <script src="https://cdn.jsdelivr.net/vue.resource/1.3.1/vue-resource.min.js"></script>
+    <!--<script src="https://unpkg.com/vue-resource@1.3.1"></script>-->
+</head>
+<body>
+<div id="app">
+    <%- xss %>
+    <form>
+        <label>姓名：<input type="text" v-model="search.name"></label>
+        <label>年龄：<input type="number" v-model.number="search.age"></label>
+        <label>
+            性别：
+            <select v-model="search.sex">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </label>
+        <button type="button" @click="doSearch">查询Person</button>
+    </form>
+    <table style="margin-bottom:50px;">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+        </tr>
+        <tr v-for="person in persons">
+            <td>{{person.name}}</td>
+            <td>{{person.age}}</td>
+            <td>{{person.sex}}</td>
+        </tr>
+    </table>
+    <form>
+        <label>姓名：<input type="text" v-model="newPerson.name"></label><br>
+        <label>年龄：<input type="number" v-model.number="newPerson.age"></label><br>
+        <label>
+            性别：
+            <select v-model="newPerson.sex">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </label><br>
+        <button type="button" @click="add">添加Person</button>
+    </form>
+</div>
+<script src="/javascripts/index.js"></script>
+<script>
+	var ws = new WebSocket('ws://localhost:4000/test');
+
+	// 打开WebSocket连接后立刻发送一条消息:
+	ws.onmessage = function (evt) {
+		console.log("数据已接收...",evt.data);
+	};
+
+	ws.onopen = function()
+	{
+		ws.send("发送数据");
+		console.log("数据发送中...");
+	};
+</script>
+</body>
+</html>
